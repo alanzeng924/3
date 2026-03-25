@@ -3,14 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pictures</title>
+    <title>Cyber Frame</title>
     <style>
       :root {
-        --bg: #f4f6f8;
-        --card: #ffffff;
-        --text: #1f2937;
-        --muted: #6b7280;
-        --accent: #0f766e;
+        --bg-1: #04151a;
+        --bg-2: #07232b;
+        --line: #47d6ff;
+        --line-soft: rgba(71, 214, 255, 0.35);
+        --text: #dff8ff;
+        --panel: rgba(5, 20, 28, 0.72);
       }
 
       * {
@@ -19,70 +20,209 @@
 
       body {
         margin: 0;
-        font-family: "Avenir Next", "PingFang SC", "Hiragino Sans GB", sans-serif;
-        background: radial-gradient(circle at top left, #e6f6f4 0, var(--bg) 45%, #eef2f7 100%);
-        color: var(--text);
-      }
-
-      .container {
-        width: min(1000px, 92%);
-        margin: 48px auto;
-      }
-
-      h1 {
-        margin: 0 0 10px;
-        font-size: clamp(1.8rem, 2.8vw, 2.6rem);
-        letter-spacing: 0.02em;
-      }
-
-      p {
-        margin: 0 0 26px;
-        color: var(--muted);
-      }
-
-      .gallery {
+        min-height: 100vh;
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 18px;
+        place-items: center;
+        padding: 24px;
+        color: var(--text);
+        font-family: "DIN Alternate", "Avenir Next", "PingFang SC", sans-serif;
+        background:
+          radial-gradient(1200px 600px at 8% 10%, #0d3944 0%, transparent 55%),
+          radial-gradient(900px 500px at 92% 82%, #0b2e39 0%, transparent 60%),
+          linear-gradient(145deg, var(--bg-1), var(--bg-2));
       }
 
-      figure {
-        margin: 0;
-        background: var(--card);
-        border-radius: 16px;
+      .scene {
+        width: min(920px, 100%);
+      }
+
+      .title {
+        margin: 0 0 16px;
+        letter-spacing: 0.16em;
+        font-size: clamp(0.9rem, 2.2vw, 1.1rem);
+        text-transform: uppercase;
+        color: #9befff;
+      }
+
+      .frame {
+        position: relative;
+        padding: 22px;
+        border: 1px solid var(--line-soft);
+        background: var(--panel);
+        box-shadow:
+          inset 0 0 0 1px rgba(114, 231, 255, 0.12),
+          0 0 24px rgba(71, 214, 255, 0.16);
+        isolation: isolate;
+      }
+
+      .frame::before,
+      .frame::after {
+        content: "";
+        position: absolute;
+        width: 28px;
+        height: 28px;
+        border: 2px solid var(--line);
+        filter: drop-shadow(0 0 8px rgba(71, 214, 255, 0.6));
+      }
+
+      .frame::before {
+        top: 10px;
+        left: 10px;
+        border-right: 0;
+        border-bottom: 0;
+      }
+
+      .frame::after {
+        right: 10px;
+        bottom: 10px;
+        border-left: 0;
+        border-top: 0;
+      }
+
+      .frame-glow {
+        position: absolute;
+        inset: -1px;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .frame-glow::before {
+        content: "";
+        position: absolute;
+        inset: -2px;
+        border-radius: 2px;
+        background: conic-gradient(
+          from 0deg,
+          transparent 0deg,
+          rgba(71, 214, 255, 0.9) 28deg,
+          transparent 80deg,
+          transparent 220deg,
+          rgba(96, 255, 230, 0.8) 260deg,
+          transparent 320deg
+        );
+        filter: blur(9px);
+        opacity: 0.62;
+        animation: sweep 4.8s linear infinite;
+      }
+
+      .frame-glow::after {
+        content: "";
+        position: absolute;
+        width: 45%;
+        height: 70%;
+        top: 18%;
+        left: 25%;
+        background: radial-gradient(circle, rgba(71, 214, 255, 0.28), transparent 68%);
+        filter: blur(14px);
+        animation: pulseGlow 3.4s ease-in-out infinite;
+      }
+
+      .photo-wrap {
+        position: relative;
         overflow: hidden;
-        box-shadow: 0 10px 28px rgba(15, 23, 42, 0.09);
+        border: 1px solid rgba(122, 230, 255, 0.5);
+        background: linear-gradient(160deg, rgba(6, 28, 37, 0.9), rgba(4, 16, 24, 0.95));
+        z-index: 1;
+        display: grid;
+        place-items: center;
       }
 
-      img {
-        width: 100%;
-        height: 280px;
-        object-fit: cover;
+      .photo-wrap::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: repeating-linear-gradient(
+          to bottom,
+          rgba(155, 239, 255, 0.08) 0,
+          rgba(155, 239, 255, 0.08) 1px,
+          transparent 1px,
+          transparent 6px
+        );
+        mix-blend-mode: screen;
+        pointer-events: none;
+      }
+
+      .photo {
         display: block;
+        width: auto;
+        max-width: 100%;
+        height: auto;
+        max-height: 78vh;
+        object-fit: contain;
+        animation: pulse 4s ease-in-out infinite;
       }
 
-      figcaption {
-        padding: 12px 14px;
-        color: var(--accent);
-        font-weight: 600;
+      .meta {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 0.76rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #86dcec;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          filter: saturate(1) contrast(1);
+        }
+        50% {
+          filter: saturate(1.08) contrast(1.04);
+        }
+      }
+
+      @keyframes sweep {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @keyframes pulseGlow {
+        0%,
+        100% {
+          transform: scale(1);
+          opacity: 0.45;
+        }
+        50% {
+          transform: scale(1.08);
+          opacity: 0.8;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .frame {
+          padding: 14px;
+        }
+
+        .meta {
+          flex-direction: column;
+          gap: 6px;
+          font-size: 0.68rem;
+        }
       }
     </style>
   </head>
   <body>
-    <main class="container">
-      <section class="gallery">
-        <figure>
-          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80" alt="山景照片" />
-          <figcaption>照片 1</figcaption>
-        </figure>
-        <figure>
-          <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=80" alt="湖泊照片" />
-          <figcaption>照片 2</figcaption>
-        </figure>
-        <figure>
-          <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=80" alt="海边照片" />
-          <figcaption>照片 3</figcaption>
-        </figure>
+    <main class="scene">
+      <h1 class="title">Visual Archive // 01</h1>
+      <section class="frame">
+        <div class="frame-glow" aria-hidden="true"></div>
+        <div class="photo-wrap">
+          <img
+            class="photo"
+            src="https://img.alanzeng.com/D15869D2-957A-4F32-9F89-02432CF83BC9_1_105_c.jpeg"
+            alt="照片"
+          />
+        </div>
+        <div class="meta">
+          <span>Neon Frame Online</span>
+          <span>Signal Stable 99.8%</span>
+        </div>
       </section>
     </main>
   </body>
